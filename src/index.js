@@ -1,12 +1,27 @@
-import dotenv from 'dotenv' 
-import connectToDatabase from "./db/dataConnection.js";
+import dotenv from 'dotenv'
+import { connectToDatabase } from "./db/dataConnection.js";
+import { app } from './app.js';
 
 dotenv.config({
-    path: "./.env"
+    path: './.env'
 })
+ 
 
+connectToDatabase()
+.then(()=>{
+    app.listen (process.env.PORT, ()=>{
+        console.log(`Server is running on port ${process.env.PORT}`)
+    })
 
-connectToDatabase();
+    app.on('error',(error)=>{
+        console.log("errore", error)
+        throw error
+    });
+
+})
+.catch((error)=>{
+    console.log(error)
+})
 
 
 
