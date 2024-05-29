@@ -1,0 +1,25 @@
+{
+  "name": "ByteBazaar",
+  "version": "1.0.0",
+  "description": "ECommerce BackEnd ",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon  src/index.js"
+  },
+  "keywords": [
+    "kodingMonk"
+  ],
+  "author": "Dinesh Yadav",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.1",
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.0"
+  }
+}
