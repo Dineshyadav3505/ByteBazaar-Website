@@ -9,12 +9,19 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(express.jsom({ limit: process.env.Data_Limit }));
+app.use(express.json({ limit: process.env.Data_Limit }));
 
 app.use(express.urlencoded({extended: true, limit: process.env.Data_Limit}));
 
 app.use(express.static("public"))
 
 app.use(cookieParser());
+
+
+                 // Routes //
+///////////////////////////////////////////////////////////////
+import userRouter from "./routes/user.route.js"
+
+app.use("/api/v1/users", userRouter)
 
 export {app} 
