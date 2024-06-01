@@ -1,7 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose,{Schema} from "mongoose";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-
+import bcrypt from 'bcryptjs';
 // User Schema
 const userSchema = new Schema({
     fullName: { 
@@ -14,7 +13,6 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true,
         trim: true
-
     },
     phoneNumber: { 
         type: String,
@@ -32,7 +30,6 @@ const userSchema = new Schema({
     }
 }, { timestamps: true });
 
-
 // Bcrypt password hashing
 userSchema.pre("save", async function(next) {
     try {
@@ -43,14 +40,14 @@ userSchema.pre("save", async function(next) {
     } catch (err) {
         return next(err);
     }
-})
-
+});
 
 // Password verification
 userSchema.methods.isPasswordCorrect = async function(password) {
     return await bcrypt.compare(password, this.password);
 };
 
+// Access Token generation
 userSchema.methods.generateAccessToken = function() {
     return jwt.sign(
         { 
@@ -59,7 +56,10 @@ userSchema.methods.generateAccessToken = function() {
             phoneNumber: this.phoneNumber,
             fullName: this.fullName
         }, 
-        process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE});
+        process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRE });
 };
 
-export const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export {User
+};
