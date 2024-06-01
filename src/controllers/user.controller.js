@@ -97,19 +97,50 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-
 const logoutUser = asyncHandler(async (req, res) => {
-  console.log("User logged out Successfully");
+
+  const user = await User.findById(req.user?._id).select("-password");
+  console.log("User logged Out Successfully");
   return res
   .status(200)
   .clearCookie("accessToken", option)
-  .json(new ApiResponse(200, {}, "User logged Out"))
+  .json(new ApiResponse(200, {user}, "User logged Out"))
 
 });  
+
+const updateAccountDetails = asyncHandler(async (req, res) => {
+
+  const { fullName, email, phoneNumber } = req.body;
+
+  console.log(fullName, email, phoneNumber)
+
+  if(!(fullName || email || phoneNumber)){
+    throw new ApiError(400, "Enter the fields to update");
+  }
+
+  const user = await User.findByIdAndUpdate(req.user?._id,
+    {
+      $set:{
+        fullName,
+        email,
+        phoneNumber
+      }
+    },
+    {new: true}
+  ).select("-password");
+  
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, user, "User details updated successfully")
+    )
+
+});
 
 
 export { 
   registerUser, 
   loginUser,
-  logoutUser
+  logoutUser,
+  updateAccountDetails
 };
