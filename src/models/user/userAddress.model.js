@@ -19,18 +19,24 @@ const AddressSchema = new Schema({
     },
     pincode:{
         type: Number,
+        minLenght:[ 5, " invalid pincode"],
+        maxLenght:[ 5, " invalid pincode"],
         required:true,
     },
     country:{
         type:String,
         default:"India"
     },
-    phone:{
+    phoneNumber:{
         type: Number,
+        minLenght:[ 10, "Phone Number must contain 10 numbers"],
+        maxLenght:[ 10, "Phone Number must contain 10 numbers"],
         required:true,
     },
 
     
 },{timestamps:true});
 
-export default mongoose.model("Address",AddressSchema);
+const Address = mongoose.model("Address", AddressSchema);
+
+export default Address;
