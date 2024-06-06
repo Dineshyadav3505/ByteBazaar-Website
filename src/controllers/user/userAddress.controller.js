@@ -89,12 +89,20 @@ const updateUserAddress = asyncHandler(async (req, res) => {
       .status(200)
       .json(
         new ApiResponse(200, updatedAddress, "User address updated successfully")
-      );
-  });
+    );
+});
 
+const deleteUserAddress = asyncHandler(async(req, res) => {
+    const address = await Address.findByIdAndDelete(req.params.addressId);
+    return res
+    .status(200)
+    .clearCookie("accessToken", option)
+    .json(new ApiResponse(200, address, "User address deleted successfully"))
+});
+  
 
 export { 
     userAddress,
     updateUserAddress,
-
+    deleteUserAddress
 };
