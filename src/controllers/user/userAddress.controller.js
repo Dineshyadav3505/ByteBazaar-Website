@@ -19,7 +19,7 @@ const userAddress = asyncHandler(async (req, res) => {
     }
   
     // console.log(user);
-    console.log(addressLine1, addressLine2, city, pincode, phoneNumber)
+    // console.log(addressLine1, addressLine2, city, pincode, phoneNumber)
  
     if (![addressLine1, addressLine2, city, pincode, phoneNumber]){
       throw new ApiError(400, "All fields are required");
@@ -99,10 +99,20 @@ const deleteUserAddress = asyncHandler(async(req, res) => {
     .clearCookie("accessToken", option)
     .json(new ApiResponse(200, address, "User address deleted successfully"))
 });
-  
+
+const allUserAddress = asyncHandler(async (req, res) => {
+    const user = req.user;
+    const addresses = await Address.find({
+      user: user._id,
+    });
+    return res
+      .status(200)
+      .json(new ApiResponse(200, addresses, "User addresses fetched successfully"));
+});
 
 export { 
     userAddress,
     updateUserAddress,
-    deleteUserAddress
+    deleteUserAddress,
+    allUserAddress
 };
