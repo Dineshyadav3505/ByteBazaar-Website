@@ -10,7 +10,7 @@ const productDiscountSchema = new Schema({
         required: true
     },
     discount: {
-        type: Number,
+        type: number,
         required: true,
     }, 
     active:{ 
