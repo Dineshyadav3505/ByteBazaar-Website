@@ -1,15 +1,14 @@
+import e from "express";
 import mongoose,{Schema} from "mongoose";
 
 const productCategorySchema = new Schema({
-    name: { 
+    type: { 
         type: String, 
         required: true 
-    },
-    description: { 
-        type: String, 
-        required: true
     },
    
 }, { timestamps: true });
 
-export const ProductCategory = mongoose.model("ProductCategory", productCategorySchema);
+const ProductCategory = mongoose.model("ProductCategory", productCategorySchema);
+
+export default ProductCategory;
