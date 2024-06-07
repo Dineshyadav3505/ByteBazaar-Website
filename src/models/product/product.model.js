@@ -19,6 +19,10 @@ const productSchema = new Schema({
         type: Number, 
         required: true 
     },
+    discount: { 
+        type: Number,
+        required: true 
+    },
     categoryId: { 
         type: Schema.Types.ObjectId, 
         ref: "ProductCategory",
@@ -27,11 +31,7 @@ const productSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: "ProductInventory",
     },
-    discount: { 
-        type: Schema.Types.ObjectId,
-        ref: "ProductDiscount",
-    },
-    
+   
 }, { timestamps: true });
 
 export const Product = mongoose.model("Product", productSchema);
