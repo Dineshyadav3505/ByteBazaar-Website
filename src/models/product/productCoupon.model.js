@@ -11,4 +11,6 @@ const productCouponSchema = new Schema({
     }
 },{timestamps:true});
 
-export const ProductCoupon = mongoose.model("ProductCoupon", productCouponSchema);
+const ProductCoupon = mongoose.model("ProductCoupon", productCouponSchema);
+
+export default ProductCoupon;

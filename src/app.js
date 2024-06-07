@@ -28,9 +28,11 @@ import userWishList from './routes/user/userWishList.route.js';
 import userShoppingList from './routes/user/userShopping.route.js';
 
 import productRouter from "./routes/product/product.route.js";
+import productCoupon from './routes/product/productCoupon.route.js';
 
 app.use("/api/v1/users", userRouter, userAddress, userWishList, userShoppingList);
 
-app.use("/api/v1/products", productRouter, );
+app.use("/api/v1/products", productRouter); 
+app.use("/api/v1/coupon", productCoupon); 
 
 export { app };
