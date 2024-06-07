@@ -20,25 +20,5 @@ const userWishList = asyncHandler(async (req, res) => {
 });
 
 
-const deleteUserWishList = asyncHandler(async(req, res) => {
-    const wishList = await Address.findByIdAndDelete(req.params.addressId);
-    return res
-    .status(200)
-    .clearCookie("accessToken", option)
-    .json(new ApiResponse(200, address, "User address deleted successfully"))
-});
 
-const allUserAddress = asyncHandler(async (req, res) => {
-    const user = req.user;
-    const addresses = await Address.find({
-      user: user._id,
-    });
-    return res
-      .status(200)
-      .json(new ApiResponse(200, addresses, "User addresses fetched successfully"));
-});
-
-export { 
-    deleteUserWishList,
-    userWishList,
-};
+export { userWishList };

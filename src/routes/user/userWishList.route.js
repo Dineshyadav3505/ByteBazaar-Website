@@ -1,11 +1,11 @@
 import { Router } from "express";
 import {verifyJWT} from "../../middlewares/auth.middleware.js";
-import { userWishList } from "../../controllers/user/userWishList.controller.js";
+import { userShoppingList } from "../../controllers/user/userShopping.controller.js";
 const router = Router()
 
 
 
-router.route("/wishList").post(verifyJWT, userWishList);
+router.route("/wishList").post(verifyJWT, userShoppingList);
 
 
 export default router;

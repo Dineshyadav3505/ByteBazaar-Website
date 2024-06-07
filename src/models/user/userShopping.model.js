@@ -1,3 +1,4 @@
+import e from "express";
 import mongoose,{Schema} from "mongoose";
 
 const shoppingSchema = new Schema({
@@ -12,4 +13,6 @@ const shoppingSchema = new Schema({
       
 }, { timestamps: true});
 
-export const Shooping = mongoose.model("Shooping", shoppingSchema);
+const Shooping = mongoose.model("Shooping", shoppingSchema);
+
+export default Shooping;
