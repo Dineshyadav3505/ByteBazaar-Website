@@ -3,6 +3,8 @@ import { ApiError } from "../../utils/ApiError.js";
 import  {Product } from "../../models/product/product.model.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../../utils/cloudnary.js";
+import ProductCategory from "../../models/product/productCategory.model.js";
+import ProductInventory from "../../models/product/productInventory.model.js";
 
 
 const option = {
@@ -11,7 +13,7 @@ const option = {
 };
 
 const createProduct = asyncHandler(async (req, res) => {
-    const { name, description, price, discount } = req.body;
+    const { name, description, price, discount, type, quantity, Size } = req.body;
 
     const user = req.user;
 
@@ -19,7 +21,7 @@ const createProduct = asyncHandler(async (req, res) => {
         throw new ApiError(403, "You are not authorized to create a product");
     }
 
-    if (!name || !description || !price || !discount) {
+    if (!name || !description || !price || !discount || !type || !quantity || !Size) {
         throw new ApiError(400, "Please fill all the fields");
     }
 
@@ -39,12 +41,25 @@ const createProduct = asyncHandler(async (req, res) => {
             return result.secure_url;  // Assuming 'uploadOnCloudinary' returns an object with 'secure_url'
         }));
 
+        const productCategory = await ProductCategory.create({
+            type
+        });
+
+        const productInventory = await ProductInventory.create({
+            quantity
+        });
+
+
+
         const product = await Product.create({
             name,
             imageURL: imageURLs, // Assuming your Product schema can handle an array of URLs
             description,
+            size:Size,
             price,
-            discount
+            discount,
+            categoryId:productCategory._id,
+            incentoryId:productInventory._id,
         });
 
         return res
@@ -52,6 +67,8 @@ const createProduct = asyncHandler(async (req, res) => {
             .json(new ApiResponse(
                 201,
                 product,
+                productCategory,
+                productInventory,
                 "Product created successfully"
             ));
     } catch (error) {

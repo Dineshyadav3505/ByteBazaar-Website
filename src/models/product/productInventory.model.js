@@ -4,10 +4,6 @@ const productInventorySchema = new Schema({
     quantity: {
         type: Number,
         required: true,
-    },
-    percentage:{
-        type: Number,
-        required: true,
     }
 }, { timestamps: true });
 
