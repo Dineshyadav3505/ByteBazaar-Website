@@ -56,6 +56,7 @@ const createProduct = asyncHandler(async (req, res) => {
             imageURL: imageURLs, // Assuming your Product schema can handle an array of URLs
             description,
             size:Size,
+            owner: user._id,
             price,
             discount,
             categoryId:productCategory._id,
@@ -76,25 +77,68 @@ const createProduct = asyncHandler(async (req, res) => {
     }
 });
 
-
-const getAllProduct = asyncHandler(async(req, res) => {
+const getAllProduct = asyncHandler(async (req, res) => {
+  const products = await Product.find().exec();
   return res
-  .status(200)
-  .json(new ApiResponse(
-      200,
-      req.product,
-      "User fetched successfully"
-  ))
-})
+    .status(200)
+    .json(new ApiResponse(200, products, "Products fetched successfully"));
+});
 
 const deleteProduct = asyncHandler(async(req, res) => {
-  const user = await Product.findByIdAndDelete(req.product?._id);
-  return res
-  .status(200)
-  .json(new ApiResponse(200, product, "User deleted successfully"))
+
+    const user = req.user;
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        throw new ApiError(404, "Product not found");
+    }
+ 
+
+    if(user._id.toString() !== product.owner.toString()){
+        throw new ApiError(403, "You are not authorized to delete this product");
+    }
+
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, deletedProduct, "Product deleted successfully"))
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
+
+    const user = req.user;
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        throw new ApiError(404, "Product not found");
+    }
+
+    if(user._id.toString() !== product.owner.toString()){
+        throw new ApiError(403, "You are not authorized to update this product");
+    }
+
+    const { name, description, price, discount, type, quantity, Size } = req.body;
+    console.log(name, description, price, discount, type, quantity, Size)
+
+    if(!name || !description || !price || !discount || !type || !quantity || !Size){
+        throw new ApiError(400, "Please fill all the fields");
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
+        name,
+        description,
+        price,
+        discount,
+        type,
+        quantity,
+        Size
+    }, { new: true });
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, updatedProduct, "Product updated successfully"))
+
 
 });
 

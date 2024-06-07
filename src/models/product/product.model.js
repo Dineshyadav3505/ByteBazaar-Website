@@ -23,6 +23,11 @@ const productSchema = new Schema({
         type: Array,
         required: true
     },
+    owner:{
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true 
+    },
     discount: { 
         type: Number,
         required: true 
