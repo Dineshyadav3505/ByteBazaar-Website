@@ -1,12 +1,11 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiError } from "../../utils/ApiError.js";
-import  Product from "../../models/product/productCategory.model.js";
+import  Product from "../../models/product/productInventory.model.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 
 
-
-const createProductCategory = asyncHandler(async (req, res) => {
-    const {type} = req.body;
+const createProductInventory = asyncHandler(async (req, res) => {
+    const {quantity} = req.body;
 
     const user = req.user;
     console.log(user.role)
@@ -15,12 +14,12 @@ const createProductCategory = asyncHandler(async (req, res) => {
         throw new ApiError(403, "You are not authorized to create a product");
     }
 
-    if (!type) {
+    if (!quantity) {
         throw new ApiError(400, "Please fill all the fields");
     }
 
     const product = await Product.create({
-        type
+        quantity
     });
     
 
@@ -47,6 +46,4 @@ const getAllProduct = asyncHandler(async(req, res) => {
 
 
 
-export { 
-    createProductCategory,
-};
+export default  createProductInventory;
