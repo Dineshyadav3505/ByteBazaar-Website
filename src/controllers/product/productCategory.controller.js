@@ -9,7 +9,6 @@ const createProductCategory = asyncHandler(async (req, res) => {
     const {type} = req.body;
 
     const user = req.user;
-    console.log(user.role)
 
     if (user.role !== "Seller") {
         throw new ApiError(403, "You are not authorized to create a product");
