@@ -98,6 +98,8 @@ const deleteProduct = asyncHandler(async(req, res) => {
         throw new ApiError(403, "You are not authorized to delete this product");
     }
 
+    await ProductCategory.findByIdAndDelete(product.categoryId);
+    await ProductInventory.findByIdAndDelete(product.incentoryId);
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
 
     return res
