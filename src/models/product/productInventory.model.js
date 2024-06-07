@@ -5,6 +5,10 @@ const productInventorySchema = new Schema({
         type: Number,
         required: true,
     },
+    percentage:{
+        type: Number,
+        required: true,
+    }
 }, { timestamps: true });
 
 

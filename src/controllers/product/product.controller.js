@@ -13,34 +13,52 @@ const option = {
 const createProduct = asyncHandler(async (req, res) => {
     const { name, description, price, discount } = req.body;
 
+    const user = req.user;
+
+    if (user.role !== "Seller") {
+        throw new ApiError(403, "You are not authorized to create a product");
+    }
+
     if (!name || !description || !price || !discount) {
         throw new ApiError(400, "Please fill all the fields");
     }
 
-    const productLocalPath = req.file?.path;
+    if (!req.files.imageURL) {
+        throw new ApiError(400, "Product image is required");
+    }
 
-    // if (!productLocalPath) {
-    //     throw new ApiError(400, "Avatar file path is required");
-    // }
+    const productLocalPaths = req.files.imageURL.map(file => file.path);
 
-    const imageURL = await uploadOnCloudinary(productLocalPath);
+    if (!productLocalPaths || productLocalPaths.length === 0) {
+        throw new ApiError(400, "Avatar file path is required");
+    }
 
-    const product = await Product.create({
-        name,
-        imageURL,
-        description,
-        price,
-        discount
-    });
+    try {
+        const imageURLs = await Promise.all(productLocalPaths.map(async (path) => {
+            const result = await uploadOnCloudinary(path);
+            return result.secure_url;  // Assuming 'uploadOnCloudinary' returns an object with 'secure_url'
+        }));
 
-    return res
-        .status(201)
-        .json(new ApiResponse(
-            201,
-            product,
-            "Product created successfully"
-        ))
+        const product = await Product.create({
+            name,
+            imageURL: imageURLs, // Assuming your Product schema can handle an array of URLs
+            description,
+            price,
+            discount
+        });
+
+        return res
+            .status(201)
+            .json(new ApiResponse(
+                201,
+                product,
+                "Product created successfully"
+            ));
+    } catch (error) {
+        throw new ApiError(500, `Error uploading file: ${error.message}`);
+    }
 });
+
 
 const getAllProduct = asyncHandler(async(req, res) => {
   return res

@@ -8,7 +8,7 @@ const createProductInventory = asyncHandler(async (req, res) => {
     const {quantity} = req.body;
 
     const user = req.user;
-    console.log(user.role)
+
 
     if (user.role !== "Seller") {
         throw new ApiError(403, "You are not authorized to create a product");
