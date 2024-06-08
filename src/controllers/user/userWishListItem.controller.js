@@ -11,6 +11,16 @@ const option = {
 
 const addItemInWishList = asyncHandler(async (req, res) => {
     const user = req.user;
+    const Id = user._id.toString();
+
+    const wishlist = await WishList.find({ userId: user._id });
+    const userId = (wishlist.map((item) => item.userId).toString())
+
+    if(Id !== userId) {
+      const wishlist = await WishList.create({
+        userId: user._id,
+      });
+    }
 
     const { productId } = req.params;
 
@@ -19,8 +29,6 @@ const addItemInWishList = asyncHandler(async (req, res) => {
     if (alreadyInWishlist) {
       throw new ApiError(400, "Item already in wishlist");
     }
-
-    const wishlist = await WishList.find({ userId: user._id });   
 
     const wishlistId = (wishlist.map((item) => item._id).toString()); 
       
