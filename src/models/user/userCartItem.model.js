@@ -1,19 +1,23 @@
 import mongoose,{Schema} from "mongoose";
 
 const cartItemSchema = new Schema({
-    session: { 
+    cartId: { 
         type: Schema.Types.ObjectId, 
-        ref: "Shooping"
+        ref: "Cart"
     },
     productId: { 
         type: Schema.Types.ObjectId, 
-        ref: "Product"
+        ref: "Product",
+        unique: true
     },
     quantity: {
         type: Number,
         required: true,
+        default: 1,
     }, 
 
 },{timestamps:true});
 
-export const CartItem = mongoose.model("CartItem", cartItemSchema);
+const CartItem = mongoose.model("CartItem", cartItemSchema);
+
+export default CartItem;
