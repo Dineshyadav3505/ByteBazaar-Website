@@ -3,6 +3,7 @@ import { ApiError } from "../../utils/ApiError.js";
 import  CartItem from "../../models/user/userCartItem.model.js";
 import Cart from "../../models/user/userCart.model.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
+import Product from "../../models/product/product.model.js";
 
 const addItemInCart = asyncHandler(async (req, res) => {
     const user = req.user;
@@ -19,7 +20,7 @@ const addItemInCart = asyncHandler(async (req, res) => {
 
     const { productId } = req.params;
 
-    const alreadyInCart = await Cart.findOne({ productId });
+    const alreadyInCart = await CartItem.find({ productId });
 
     if (alreadyInCart) {
         throw new ApiError(400, "Item already in cart");
@@ -40,13 +41,18 @@ const addItemInCart = asyncHandler(async (req, res) => {
 });
 
 const getCartItem = asyncHandler(async (req, res) => {
-    const user = req.user;
-    const cart = await Cart.find({ userId: user._id });
-    const cartId = (cart.map((item) => item._id).toString());
-    const cartItem = await CartItem.find({ cartId });
-    return res
-      .status(200)
-      .json(new ApiResponse(200, cartItem, "Wishlist items fetched successfully"));
+  const user = req.user;
+  const cart = await Cart.find({ userId: user._id });
+  const cartId = (cart.map((item) => item._id).toString());
+  const cartItem = await CartItem.find({ cartId })
+      .populate({
+          path: 'productId',
+          select: 'imageURL name description price size owner discount'
+      });
+  
+  return res
+    .status(200)
+    .json(new ApiResponse(200, cartItem, "Wishlist items fetched successfully"));
 });
 
 const deleteCartItem = asyncHandler(async (req, res) => {

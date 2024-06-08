@@ -44,13 +44,17 @@ const addItemInWishList = asyncHandler(async (req, res) => {
 });
 
 const getWishList = asyncHandler(async (req, res) => {
-    const user = req.user;
-    const wishlist = await WishList.find({ userId: user._id });
-    const wishlistId = (wishlist.map((item) => item._id).toString());
-    const wishlistItems = await WishlistItem.find({ wishlistId });
-    return res
-      .status(200)
-      .json(new ApiResponse(200, wishlistItems, "Wishlist items fetched successfully"));
+  const user = req.user;
+  const wishlist = await WishList.find({ userId: user._id });
+  const wishlistId = (wishlist.map((item) => item._id).toString());
+  const wishlistItems = await WishlistItem.find({ wishlistId })
+      .populate({
+        path: 'productId',
+        select: 'imageURL name description price size owner discount'
+      });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, wishlistItems, "Wishlist items fetched successfully"));
 });
 
 const deleteWishListItem = asyncHandler(async (req, res) => {
