@@ -35,11 +35,11 @@ const productCoupon = asyncHandler(async (req, res) => {
 
 const productCouponUpdate = asyncHandler(async (req, res) => {
     const user = req.user;
-    console.log(user)
+
     const { value, discount } = req.body;
 
     const product = await ProductCoupon.findById(req.params.id);
-    console.log(product)
+
 
     if (user.role !== "Seller") {
         throw new ApiError(403, "You are not authorized to update a product");
