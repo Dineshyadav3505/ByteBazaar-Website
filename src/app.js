@@ -29,10 +29,15 @@ import userShoppingList from './routes/user/userShopping.route.js';
 
 import productRouter from "./routes/product/product.route.js";
 import productCoupon from './routes/product/productCoupon.route.js';
+import productReview from './routes/product/productReview.route.js';
 
-app.use("/api/v1/users", userRouter, userAddress, userWishList, userShoppingList);
+import userWishListItem from "./routes/user/userWistListItem.route.js.js"
+app.use("/api/v1/users", userRouter, userAddress, userWishList, userShoppingList, userWishListItem);
 
 app.use("/api/v1/products", productRouter); 
+
 app.use("/api/v1/coupon", productCoupon); 
+
+app.use("/api/v1/review", productReview);
 
 export { app };
