@@ -25,14 +25,17 @@ app.use(cookieParser());
 import userRouter from "./routes/user/user.route.js";
 import userAddress from './routes/user/userAddress.route.js';
 import userWishList from './routes/user/userWishList.route.js';
-import userShoppingList from './routes/user/userShopping.route.js';
+import userCartList from './routes/user/userCart.route.js';
 
 import productRouter from "./routes/product/product.route.js";
 import productCoupon from './routes/product/productCoupon.route.js';
 import productReview from './routes/product/productReview.route.js';
 
 import userWishListItem from "./routes/user/userWistListItem.route.js.js"
-app.use("/api/v1/users", userRouter, userAddress, userWishList, userShoppingList, userWishListItem);
+import userCartItem from "./routes/user/userCartItem.route.js"
+
+
+app.use("/api/v1/users", userRouter, userAddress, userWishList, userCartList, userWishListItem, userCartItem);
 
 app.use("/api/v1/products", productRouter); 
 
