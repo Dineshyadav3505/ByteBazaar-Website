@@ -5,6 +5,10 @@ const orderPaymentDetailsSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"Order"
     },
+    userId:{
+        type:Schema.Types.ObjectId,
+        ref:"User",
+    },
     amount:{
         type:Number,
         required:true,
@@ -12,6 +16,7 @@ const orderPaymentDetailsSchema = new Schema({
     status:{
         type:String,
         required:true,
+        default:"pending",
     },
     paymentMode:{
         type:String,

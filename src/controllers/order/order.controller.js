@@ -38,6 +38,8 @@ const createOrder = asyncHandler(async (req, res) => {
     productInventory.quantity -= quantity;
     await productInventory.save();
 
+    const totalPrice = (product.price - product.discount) * quantity;
+
     // create order
     const order = new Order({
         userId: user._id,
@@ -45,6 +47,7 @@ const createOrder = asyncHandler(async (req, res) => {
         color,
         size,
         quantity,
+        totalPrice,
         userAddress: userAddress?.[0]?._id || null
     });
 
