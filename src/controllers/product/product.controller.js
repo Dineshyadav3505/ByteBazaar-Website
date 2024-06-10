@@ -141,9 +141,31 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 
+
+const productCategoryType = asyncHandler(async (req, res) => {
+    const type = req.body.type;
+    console.log(type)  
+
+    if (!type) {
+        throw new ApiError(400, "Please provide a category type");
+    }
+
+    const productCategory = await ProductCategory.find({type: { $regex: new RegExp(type, "i")} });
+
+    res
+    .status(200)
+    .json
+    (
+        new ApiResponse(200, productCategory, "Product Category fetched successfully")
+    );
+});
+
+
 export { 
     createProduct,
     getAllProduct,
     deleteProduct,
-    updateProduct
+    updateProduct,
+    productCategoryType,
+    productCategoryprice
 };

@@ -1,4 +1,3 @@
-import e from "express";
 import mongoose,{Schema} from "mongoose";
 
 const productCategorySchema = new Schema({
@@ -8,6 +7,9 @@ const productCategorySchema = new Schema({
     },
    
 }, { timestamps: true });
+
+
+
 
 const ProductCategory = mongoose.model("ProductCategory", productCategorySchema);
 
