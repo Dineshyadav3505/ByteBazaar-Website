@@ -4,6 +4,7 @@ import { ApiError } from "../../utils/ApiError.js";
 import  { User } from "../../models/user/user.model.js";
 import  Address from "../../models/user/userAddress.model.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
+import Order from "../../models/order/order.model.js";
 
 const option = {
   httpOnly: true,
@@ -11,42 +12,46 @@ const option = {
 };
 
 const userAddress = asyncHandler(async (req, res) => {
-    const { addressLine1, addressLine2, city, pincode, phoneNumber } = req.body;
-    const user = req.user; // Assuming req.user is defined
+  const { name, addressLine1, addressLine2, city, pincode, phoneNumber } = req.body;
+  const user = req.user; // Assuming req.user is defined
   
-    if (!user) {
-      throw new ApiError(401, "Please login to add address");
-    }
+  if (!user) {
+    throw new ApiError(401, "Please login to add address");
+  }
   
-    // console.log(user);
-    // console.log(addressLine1, addressLine2, city, pincode, phoneNumber)
- 
-    if (![addressLine1, addressLine2, city, pincode, phoneNumber]){
-      throw new ApiError(400, "All fields are required");
-    }
+  if (![name, addressLine1, addressLine2, city, pincode, phoneNumber]){
+    throw new ApiError(400, "All fields are required");
+  }
 
-    if(pincode.length !== 6){
-      throw new ApiError(400, "Invalid pincode");
-    }
+  if(pincode.length !== 6){
+    throw new ApiError(400, "Invalid pincode");
+  }
 
-    if(phoneNumber.length !== 10){
-      throw new ApiError(400, "Invalid phone number");
-    }
+  if(phoneNumber.length !== 10){
+    throw new ApiError(400, "Invalid phone number");
+  }
   
-    const userAddress = await Address.create({
-      user: user._id,
-      addressLine1,
-      addressLine2,
-      city,
-      pincode,
-      phoneNumber,
-    });
-  
-    return res
-      .status(201)
-      .json(
-        new ApiResponse(201, userAddress, "User address created successfully")
-      );
+  const userAddress = await Address.create({
+    user: user._id,
+    name,
+    addressLine1,
+    addressLine2,
+    city,
+    pincode,
+    phoneNumber,
+  });
+  const id = (userAddress._id.toString())
+
+  const addressId = (userAddress.id.toString());
+
+  // Update the user's order with the new address
+  await Order.updateMany({ userId: user._id }, { $set: { userAddress: addressId } });
+
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(201, userAddress, "User address created successfully")
+    );
 });
 
 const updateUserAddress = asyncHandler(async (req, res) => {
@@ -59,7 +64,7 @@ const updateUserAddress = asyncHandler(async (req, res) => {
     }
   
   
-    if (![addressLine1, addressLine2, city, pincode, phoneNumber].some((field) => field)) {
+    if (![name, addressLine1, addressLine2, city, pincode, phoneNumber].some((field) => field)) {
       throw new ApiError(400, "All fields are required");
     }
   
@@ -73,7 +78,8 @@ const updateUserAddress = asyncHandler(async (req, res) => {
   
     const updatedAddress = await Address.findOneAndUpdate(
       { _id: addressId, user: user._id },
-      { addressLine1, 
+      { name,
+        addressLine1, 
         addressLine2, 
         city, 
         pincode, 

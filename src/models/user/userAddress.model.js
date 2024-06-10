@@ -5,6 +5,10 @@ const AddressSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:"User"
     },
+    name:{
+        type:String,
+        required:true,
+    },
     addressLine1:{
         type:String,
         required:true,

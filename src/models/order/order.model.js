@@ -21,7 +21,10 @@ const orderSchema = new Schema({
         type: Number, 
         required: true 
     },
-
+    userAddress: { 
+        type: Schema.Types.ObjectId, 
+        ref: "Address", 
+    },
     
 }, { timestamps: true });
 
