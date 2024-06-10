@@ -9,7 +9,7 @@ import ProductInventory from "../../models/product/productInventory.model.js";
 
   
 const createProduct = asyncHandler(async (req, res) => {
-    const { name, description, price, discount, type, quantity, Size } = req.body;
+    const { name, description, price, discount, type, colour, quantity, Size } = req.body;
 
     const user = req.user;
 
@@ -17,7 +17,7 @@ const createProduct = asyncHandler(async (req, res) => {
         throw new ApiError(403, "You are not authorized to create a product");
     }
 
-    if (!name || !description || !price || !discount || !type || !quantity || !Size) {
+    if (!name || !description || !price || !colour  || !discount || !type || !quantity || !Size) {
         throw new ApiError(400, "Please fill all the fields");
     }
 
@@ -54,6 +54,7 @@ const createProduct = asyncHandler(async (req, res) => {
             size:Size,
             owner: user._id,
             price,
+            colour,
             discount,
             categoryId:productCategory._id,
             inventoryId:productInventory._id,
@@ -147,7 +148,7 @@ const productCategoryprice = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Please provide a price range");
     }
 
-    const productCategory = await Product.find({
+    const product = await Product.find({
         price: { $gte: minPrice, $lte: maxPrice }
     });
 
@@ -155,10 +156,27 @@ const productCategoryprice = asyncHandler(async (req, res) => {
     .status(200)
     .json
     (
-        new ApiResponse(200, productCategory, "Product Category fetched successfully")
+        new ApiResponse(200, product, "Product Category fetched successfully")
     );
 });
 
+const productCategoryColour = asyncHandler(async (req, res) => {
+    const colour = req.body.colour;
+    console.log(typeof colour); // Use typeof to check the type of colour
+
+    if (!colour) {
+        throw new ApiError(400, "Please provide a category type");
+    }
+
+    const product = await Product.find({ colour: { $regex: new RegExp(colour, "i")} });
+
+    res
+    .status(200)
+    .json
+    (
+        new ApiResponse(200, product, "Product Category fetched successfully")
+    );
+});
 
 const productCategoryType = asyncHandler(async (req, res) => {
     const type = req.body.type;
@@ -185,5 +203,6 @@ export {
     deleteProduct,
     updateProduct,
     productCategoryType,
-    productCategoryprice
+    productCategoryprice,
+    productCategoryColour
 };

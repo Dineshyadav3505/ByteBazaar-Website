@@ -19,6 +19,10 @@ const productSchema = new Schema({
         type: Number, 
         required: true 
     },
+    colour: {
+        type: String,
+        required: true
+    },
     size:{
         type: Array,
         required: true
