@@ -4,10 +4,6 @@ import  WishlistItem from "../../models/user/userWishListItem.model.js";
 import WishList from "../../models/user/userWishList.model.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 
-const option = {
-  httpOnly: true,
-  secure: true
-};
 
 const addItemInWishList = asyncHandler(async (req, res) => {
     const user = req.user;

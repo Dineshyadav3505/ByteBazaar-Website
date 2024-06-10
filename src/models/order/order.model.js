@@ -5,9 +5,9 @@ const orderSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: "User", 
     },
-    paymentId:{
-        type: Schema.Types.ObjectId,
-        ref: "OrderPaymentDetails",
+    productId: { 
+        type: Schema.Types.ObjectId, 
+        ref: "Product", 
     },
     color:{
         type: String,
@@ -21,11 +21,10 @@ const orderSchema = new Schema({
         type: Number, 
         required: true 
     },
-    price:{
-        type: Schema.Types,
-        required: true
-    },
+
     
 }, { timestamps: true });
 
-export const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
+
+export default Order;

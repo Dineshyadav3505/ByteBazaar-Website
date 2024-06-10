@@ -33,6 +33,7 @@ import productReview from './routes/product/productReview.route.js';
 
 import userWishListItem from "./routes/user/userWistListItem.route.js.js"
 import userCartItem from "./routes/user/userCartItem.route.js"
+import order from "./routes/order/order.route.js"
 
 
 app.use("/api/v1/users", userRouter, userAddress, userWishList, userCartList, userWishListItem, userCartItem);
@@ -42,5 +43,7 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/coupon", productCoupon); 
 
 app.use("/api/v1/review", productReview);
+
+app.use("/api/v1/order", order);
 
 export { app };

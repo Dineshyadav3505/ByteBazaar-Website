@@ -36,7 +36,7 @@ const productSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: "ProductCategory",
     },
-    incentoryId: {
+    inventoryId: {
         type: Schema.Types.ObjectId, 
         ref: "ProductInventory",
     },

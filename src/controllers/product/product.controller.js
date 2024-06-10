@@ -7,11 +7,7 @@ import ProductCategory from "../../models/product/productCategory.model.js";
 import ProductInventory from "../../models/product/productInventory.model.js";
 
 
-const option = {
-  httpOnly: true,
-  secure: true
-};
-
+  
 const createProduct = asyncHandler(async (req, res) => {
     const { name, description, price, discount, type, quantity, Size } = req.body;
 
@@ -60,7 +56,7 @@ const createProduct = asyncHandler(async (req, res) => {
             price,
             discount,
             categoryId:productCategory._id,
-            incentoryId:productInventory._id,
+            inventoryId:productInventory._id,
         });
 
         return res
