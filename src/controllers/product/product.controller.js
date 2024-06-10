@@ -140,6 +140,24 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 });
 
+const productCategoryprice = asyncHandler(async (req, res) => {
+    const { minPrice, maxPrice } = req.body;
+
+    if (!minPrice || !maxPrice) {
+        throw new ApiError(400, "Please provide a price range");
+    }
+
+    const productCategory = await Product.find({
+        price: { $gte: minPrice, $lte: maxPrice }
+    });
+
+    res
+    .status(200)
+    .json
+    (
+        new ApiResponse(200, productCategory, "Product Category fetched successfully")
+    );
+});
 
 
 const productCategoryType = asyncHandler(async (req, res) => {
