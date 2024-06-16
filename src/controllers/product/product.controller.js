@@ -9,7 +9,7 @@ import ProductInventory from "../../models/product/productInventory.model.js";
 
   
 const createProduct = asyncHandler(async (req, res) => {
-    const { name, description, price, discount, type, colour, quantity, Size } = req.body;
+    const { name, description, price, discount, type, colour, quantity, Size, productDiscription, fabric} = req.body;
 
     const user = req.user;
 
@@ -17,7 +17,7 @@ const createProduct = asyncHandler(async (req, res) => {
         throw new ApiError(403, "You are not authorized to create a product");
     }
 
-    if (!name || !description || !price || !colour  || !discount || !type || !quantity || !Size) {
+    if (!name || !description || !price || !colour  || !discount || !type || !quantity || !Size ||!productDiscription || !fabric) {
         throw new ApiError(400, "Please fill all the fields");
     }
 

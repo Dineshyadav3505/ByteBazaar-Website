@@ -15,6 +15,16 @@ const productSchema = new Schema({
         type: String, 
         required: true
     },
+    productDiscription:[ 
+        {
+            type: String,
+            required: true
+        }
+    ],
+    fabric:{
+        type: String,
+        required: true
+    },
     price: { 
         type: Number, 
         required: true 
