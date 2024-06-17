@@ -98,6 +98,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
+  console.log("user")
 
   const user = await User.findById(req.user?._id).select("-password");
   console.log("User logged Out Successfully");
