@@ -28,12 +28,23 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All fields are required");
   }
 
-  const existedUser = await User.findOne({
-    $or: [{ phoneNumber }, { email }],
-  });
 
-  if (existedUser) {
+  const userEmail = await User.findOne({ email });
+  if (userEmail) {
     throw new ApiError(409, "Email already exists");
+  }
+
+  const userPhoneNumber = await User.findOne({ phoneNumber });
+  if (userPhoneNumber) {
+    throw new ApiError(409, "Phone number already exists");
+  }
+
+  if(phoneNumber.length !== 10){
+    throw new ApiError(400, "Phone number must be 10 digits");
+  }
+
+  if(password.length < 8 || password.length > 16){
+    throw new ApiError(400, "Password must be between 8 and 16 characters");
   }
 
   const user = await User.create({
@@ -68,7 +79,7 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 
   if (!user) {
-    throw new ApiError(404, "Incorrect email");
+    throw new ApiError(404, "User not created");
   }
 
   const passwordCheck = await user.isPasswordCorrect(password);
