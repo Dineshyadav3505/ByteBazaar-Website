@@ -60,7 +60,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, phoneNumber, password } = req.body;
 
   if (!(phoneNumber || email)) {
-    throw new ApiError(400, "Enter email id and Phone Number to login");
+    throw new ApiError(400, "Email already exists");
   }
 
   const user = await User.findOne({
