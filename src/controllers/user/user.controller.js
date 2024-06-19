@@ -33,7 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (existedUser) {
-    throw new ApiError(409, "User with email or Phone Number already exists");
+    throw new ApiError(409, "Email already exists");
   }
 
   const user = await User.create({
@@ -68,13 +68,13 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 
   if (!user) {
-    throw new ApiError(404, "User does not exist");
+    throw new ApiError(404, "Incorrect email");
   }
 
   const passwordCheck = await user.isPasswordCorrect(password);
 
   if (!passwordCheck) {
-    throw new ApiError(401, "Invalid user credentials");
+    throw new ApiError(401, "Incorrect password");
   }
 
   const {accessToken} = await generateAccessToken(user._id);
