@@ -75,11 +75,31 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const getAllProduct = asyncHandler(async (req, res) => {
-  const products = await Product.find().exec();
-  return res
-    .status(200)
-    .json(new ApiResponse(200, products, "Products fetched successfully"));
-});
+    const { category, price, size } = req.query;
+    let query = Product.find();
+  
+    if (category) {
+      query = query.where('category').equals(category);
+    }
+
+    if (colour) {
+      query = query.where('colour').equals(colour);
+    }
+  
+    if (price) {
+      const [minPrice, maxPrice] = price.split('-');
+      query = query.where('price').gte(minPrice).lte(maxPrice);
+    }
+  
+    if (size) {
+      query = query.where('size').equals(size);
+    }
+  
+    const products = await query.exec();
+    return res
+      .status(200)
+      .json(new ApiResponse(200, products, "Products fetched successfully"));
+  });
 
 const deleteProduct = asyncHandler(async(req, res) => {
 
