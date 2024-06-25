@@ -60,10 +60,16 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "User not created");
   }
 
+  const {accessToken} = await generateAccessToken(user._id);
+
   return res
     .status(201)
+    .cookie("accessToken", accessToken, option)
     .json(
-      new ApiResponse(201, createdUser, "User created successfully")
+      new ApiResponse(201,
+        {
+          createdUser,accessToken
+        }, "User created successfully")
     );
 });
 
@@ -109,7 +115,6 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  console.log("user")
 
   const user = await User.findById(req.user?._id).select("-password");
   console.log("User logged Out Successfully");
@@ -122,7 +127,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
 
-  const { fullName, email, phoneNumber } = req.body;
+  const { fullName, email, phoneNumber} = req.body;
 
   console.log(fullName, email, phoneNumber)
 
