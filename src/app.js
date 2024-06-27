@@ -30,7 +30,8 @@ import userCartList from './routes/user/userCart.route.js';
 import productRouter from "./routes/product/product.route.js";
 import productCoupon from './routes/product/productCoupon.route.js';
 import productReview from './routes/product/productReview.route.js';
-import productImg    from './routes/product/productImg.route.js';
+import newArival from './routes/product/newArival.route.js';
+import productImg from './routes/product/productImg.route.js';
 
 import userWishListItem from "./routes/user/userWistListItem.route.js.js"
 import userCartItem from "./routes/user/userCartItem.route.js"
@@ -43,6 +44,8 @@ app.use("/api/v1/users", userRouter, userAddress, userWishList, userCartList, us
 app.use("/api/v1/products", productRouter); 
 
 app.use("/api/v1/img", productImg);
+
+app.use("/api/v1/new", newArival);
 
 app.use("/api/v1/coupon", productCoupon); 
 
