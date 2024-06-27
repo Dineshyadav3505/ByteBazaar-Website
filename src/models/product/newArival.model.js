@@ -6,6 +6,8 @@ const newArivalSchema = new Schema({
         ref: "Product",
         required: true,
     }
+},{
+    timestamps: true,
 });
 
 const NewArival = mongoose.model("NewArival", newArivalSchema);

@@ -5,7 +5,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 
 const newArival = asyncHandler(async (req, res) => {
     const user = req.user;
-    const { productId } = req.body;
+    const { productId } = req.params;
 
     if (user.role !== "Seller") {
         throw new ApiError(401, "Unauthorized");

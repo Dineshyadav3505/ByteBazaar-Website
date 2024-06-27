@@ -36,6 +36,7 @@ import productImg from './routes/product/productImg.route.js';
 import userWishListItem from "./routes/user/userWistListItem.route.js.js"
 import userCartItem from "./routes/user/userCartItem.route.js"
 import order from "./routes/order/order.route.js"
+import bestSeller from './routes/product/bestSeller.route.js';
 
 
 
@@ -46,6 +47,8 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/img", productImg);
 
 app.use("/api/v1/new", newArival);
+
+app.use("/api/v1/best", bestSeller);
 
 app.use("/api/v1/coupon", productCoupon); 
 

@@ -8,6 +8,8 @@ const productImgSchema = new Schema({
             required: true
         }
     ]
+},{
+    timestamps: true,
 })
 
 const ProductImg = mongoose.model("ProductImg", productImgSchema);

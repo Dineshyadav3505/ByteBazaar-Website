@@ -5,10 +5,10 @@ const router = Router()
 
 
 
-router.route("/create").post(verifyJWT, newArival);
+router.route("/create/:productId").post(verifyJWT, newArival);
 router.route("/").get(getNewArival);
-router.route("/:id").delete(verifyJWT, deleteNewArival);
-router.route("/:id").patch(verifyJWT, updateNewArival);
+router.route("/:productId").delete(verifyJWT, deleteNewArival);
+router.route("/:productId").patch(verifyJWT, updateNewArival);
 
 
 
