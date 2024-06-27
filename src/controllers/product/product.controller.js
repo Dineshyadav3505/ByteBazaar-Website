@@ -56,6 +56,8 @@ const createProduct = asyncHandler(async (req, res) => {
             price,
             colour,
             discount,
+            productDiscription,
+            fabric,
             categoryId:productCategory._id,
             inventoryId:productInventory._id,
         });
@@ -75,7 +77,7 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const getAllProduct = asyncHandler(async (req, res) => {
-    const { category, price, size } = req.query;
+    const { category, price, size, colour } = req.query;
     let query = Product.find();
   
     if (category) {
