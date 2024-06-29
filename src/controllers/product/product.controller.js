@@ -1,15 +1,29 @@
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { ApiError } from "../../utils/ApiError.js";
 import  Product from "../../models/product/product.model.js";
+import Category from "../../models/product/productCategory.model.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../../utils/cloudnary.js";
 import ProductCategory from "../../models/product/productCategory.model.js";
 import ProductInventory from "../../models/product/productInventory.model.js";
 
 
+
   
 const createProduct = asyncHandler(async (req, res) => {
-    const { name, description, price, discount, type, colour, quantity, Size, productDiscription, fabric} = req.body;
+    const {
+        productName,
+        description,
+        price,
+        discount,
+        color,
+        productType,
+        fit,
+        washCare,
+        specification,
+        stock,
+        size
+    } = req.body;
 
     const user = req.user;
 
@@ -17,11 +31,11 @@ const createProduct = asyncHandler(async (req, res) => {
         throw new ApiError(403, "You are not authorized to create a product");
     }
 
-    if (!name || !description || !price || !colour  || !discount || !type || !quantity || !Size ||!productDiscription || !fabric) {
+    if (!productName || !description || !price || !stock || !size || !color || !discount || !productType || !fit || !washCare || !specification) {
         throw new ApiError(400, "Please fill all the fields");
     }
 
-    if (!req.files.imageURL) {
+    if (!req.files || !req.files.imageURL) {
         throw new ApiError(400, "Product image is required");
     }
 
@@ -37,29 +51,32 @@ const createProduct = asyncHandler(async (req, res) => {
             return result.secure_url;  // Assuming 'uploadOnCloudinary' returns an object with 'secure_url'
         }));
 
-        const productCategory = await ProductCategory.create({
-            type
-        });
-
         const productInventory = await ProductInventory.create({
-            quantity
+            quantity: stock
         });
-
 
 
         const product = await Product.create({
-            name,
-            imageURL: imageURLs, // Assuming your Product schema can handle an array of URLs
+            productName,
+            imageURL: imageURLs,
             description,
-            size:Size,
-            owner: user._id,
             price,
-            colour,
+            color,
             discount,
-            productDiscription,
-            fabric,
-            categoryId:productCategory._id,
-            inventoryId:productInventory._id,
+            productType,  
+            fit,
+            washCare,
+            specification,
+            owner: user._id,
+            stock,
+            size,
+            inventoryId: productInventory._id
+        });
+
+        await ProductInventory.findByIdAndUpdate(productInventory._id, {
+            $set: {
+                product: product._id
+            }
         });
 
         return res
@@ -67,8 +84,6 @@ const createProduct = asyncHandler(async (req, res) => {
             .json(new ApiResponse(
                 201,
                 product,
-                productCategory,
-                productInventory,
                 "Product created successfully"
             ));
     } catch (error) {
@@ -80,7 +95,6 @@ const getAllProduct = asyncHandler(async (req, res) => {
     const { category, price, size, colour, search } = req.query;
 
     let query = Product.find()
-    .populate('categoryId', 'type')
     .populate('inventoryId', 'quantity');
   
     if (category) {
@@ -218,7 +232,7 @@ const productCategoryColour = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Please provide a category type");
     }
 
-    const product = await Product.find({ colour: { $regex: new RegExp(colour, "i")} });
+    const product = await Product.find({ color: { $regex: new RegExp(colour, "i")} });
 
     res
     .status(200)
@@ -229,22 +243,23 @@ const productCategoryColour = asyncHandler(async (req, res) => {
 });
 
 const productCategoryType = asyncHandler(async (req, res) => {
-    const type = req.body.type;
-    console.log(type)  
+    const type = req.params.type;
+    console.log(type); // Use typeof to check the type of type (string or number
 
     if (!type) {
         throw new ApiError(400, "Please provide a category type");
     }
 
-    const productCategory = await ProductCategory.find({type: { $regex: new RegExp(type, "i")} });
+    const product = await Product.find({ productType: { $regex: new RegExp(type, "i")} });
 
     res
     .status(200)
     .json
     (
-        new ApiResponse(200, productCategory, "Product Category fetched successfully")
+        new ApiResponse(200, product, "Product Category fetched successfully")
     );
 });
+
 
 
 export { 

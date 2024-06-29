@@ -7,34 +7,36 @@ const productSchema = new Schema({
             required: true
         }
     ],
-    name: { 
-        type: String, 
-        required: true 
-    },
-    description: { 
-        type: String, 
-        required: true
-    },
-    productDiscription:[ 
-        {
-            type: String,
-            required: true
-        }
-    ],
-    fabric:{
+    productName: {
         type: String,
         required: true
     },
-    price: { 
-        type: Number, 
-        required: true 
+    price: {
+        type: Number,
+        required: true
     },
-    colour: {
+    color: {
         type: String,
         required: true
     },
-    size:{
-        type: Array,
+    size: {
+        type: [],
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    fit: {
+        type: String,
+        required: true
+    },
+    washCare: {
+        type: [],
+        required: true
+    },
+    specification: {
+        type: [],
         required: true
     },
     owner:{
@@ -46,9 +48,14 @@ const productSchema = new Schema({
         type: Number,
         required: true 
     },
-    categoryId: { 
-        type: Schema.Types.ObjectId, 
-        ref: "ProductCategory",
+    productType: { 
+        type: String,
+        required: true
+    },
+    stock: {
+        type: Number,
+        required: true,
+        default: 0
     },
     inventoryId: {
         type: Schema.Types.ObjectId, 

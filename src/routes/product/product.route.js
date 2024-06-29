@@ -10,14 +10,13 @@ router.route("/create").post(
     upload.fields([
         {
             name : "imageURL",
-            maxCount: 5
         },
     ]),
     verifyJWT, createProduct
     );
 
 router.route("/").get(getAllProduct);
-router.route("/type").get(productCategoryType);
+router.route("/type/:type").get(productCategoryType);
 router.route("/price").get(productCategoryprice);
 router.route("/Colour").get(productCategoryColour);
 router.route("/:id").get(getAllProducsById);
