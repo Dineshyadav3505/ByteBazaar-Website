@@ -71,12 +71,13 @@ const updateNewArival = asyncHandler(async (req, res) => {
 
 const deleteNewArival = asyncHandler(async (req, res) => {
     const user = req.user;
+    const id = req.params.productId;
 
     if (user.role !== "Seller") {
         throw new ApiError(401, "Unauthorized");
     }
 
-    const newArival = await NewArival.findById(req.params.id);
+    const newArival = await NewArival.findById(id);
 
     if (!newArival) {
         throw new ApiError(404, "New arrival not found");

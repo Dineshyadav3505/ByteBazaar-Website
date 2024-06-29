@@ -77,13 +77,16 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 const getAllProduct = asyncHandler(async (req, res) => {
-    const { category, price, size, colour } = req.query;
-    let query = Product.find();
+    const { category, price, size, colour, search } = req.query;
+
+    let query = Product.find()
+    .populate('categoryId', 'type')
+    .populate('inventoryId', 'quantity');
   
     if (category) {
       query = query.where('category').equals(category);
     }
-
+  
     if (colour) {
       query = query.where('colour').equals(colour);
     }
@@ -97,11 +100,36 @@ const getAllProduct = asyncHandler(async (req, res) => {
       query = query.where('size').equals(size);
     }
   
+    if (search) {
+        query = query.where({
+          $or: [
+            { name: { $regex: search, $options: 'i' } }, // search in product name
+            { description: { $regex: search, $options: 'i' } }, // search in product description
+            { "categoryId.type": { $regex: search, $options: 'i' } } // search in category type
+          ]
+        });
+    }
+  
     const products = await query.exec();
     return res
       .status(200)
       .json(new ApiResponse(200, products, "Products fetched successfully"));
   });
+
+const getAllProducsById = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id)
+    .populate('categoryId', 'type')
+    .populate('inventoryId', 'quantity')
+    .exec();
+
+    if (!product) {
+        throw new ApiError(404, "Product not found");
+    }
+
+    return res
+     .status(200)
+     .json(new ApiResponse(200, product, "Product fetched successfully"));
+});
 
 const deleteProduct = asyncHandler(async(req, res) => {
 
@@ -226,5 +254,6 @@ export {
     updateProduct,
     productCategoryType,
     productCategoryprice,
-    productCategoryColour
+    productCategoryColour,
+    getAllProducsById
 };
