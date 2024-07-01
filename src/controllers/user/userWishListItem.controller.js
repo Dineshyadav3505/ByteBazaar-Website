@@ -46,7 +46,8 @@ const getWishList = asyncHandler(async (req, res) => {
   const wishlistItems = await WishlistItem.find({ wishlistId })
       .populate({
         path: 'productId',
-        select: 'imageURL name description price size owner discount'
+        select: 'imageURL name description price size owner discount productName color',
+        
       });
   return res
     .status(200)

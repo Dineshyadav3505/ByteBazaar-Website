@@ -117,9 +117,8 @@ const getAllProduct = asyncHandler(async (req, res) => {
     if (search) {
         query = query.where({
           $or: [
-            { name: { $regex: search, $options: 'i' } }, // search in product name
+            { productname: { $regex: search, $options: 'i' } }, // search in product name
             { description: { $regex: search, $options: 'i' } }, // search in product description
-            { "categoryId.type": { $regex: search, $options: 'i' } } // search in category type
           ]
         });
     }
@@ -132,7 +131,6 @@ const getAllProduct = asyncHandler(async (req, res) => {
 
 const getAllProducsById = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
-    .populate('categoryId', 'type')
     .populate('inventoryId', 'quantity')
     .exec();
 
@@ -244,7 +242,6 @@ const productCategoryColour = asyncHandler(async (req, res) => {
 
 const productCategoryType = asyncHandler(async (req, res) => {
     const type = req.params.type;
-    console.log(type); // Use typeof to check the type of type (string or number
 
     if (!type) {
         throw new ApiError(400, "Please provide a category type");
