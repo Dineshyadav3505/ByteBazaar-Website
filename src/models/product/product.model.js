@@ -15,6 +15,18 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
+    discount: { 
+        type: Number,
+        required: true 
+    },
+    discountedPrice: {
+        type: Number,
+        required: true,
+    },
+    discountedPercentage:{
+        type: Number,
+        required: true
+    },
     color: {
         type: String,
         required: true
@@ -42,10 +54,6 @@ const productSchema = new Schema({
     owner:{
         type: Schema.Types.ObjectId,
         ref: "User",
-        required: true 
-    },
-    discount: { 
-        type: Number,
         required: true 
     },
     productType: { 

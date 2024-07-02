@@ -63,7 +63,6 @@ const getCartItem = asyncHandler(async (req, res) => {
   const cartItem = await CartItem.find({ cartId: cart._id })
       .populate({
           path: 'productId',
-          select: 'imageURL name description price size owner discount'
       });
 
   return res

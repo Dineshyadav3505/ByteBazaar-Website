@@ -22,9 +22,11 @@ const createProduct = asyncHandler(async (req, res) => {
         washCare,
         specification,
         stock,
-        size
+        size,
     } = req.body;
 
+    const discountedPrice = (price - discount);
+    const discountedPercentage = ((discount / price) * 100).toFixed(1)
     const user = req.user;
 
     if (user.role !== "Seller") {
@@ -65,8 +67,10 @@ const createProduct = asyncHandler(async (req, res) => {
             discount,
             productType,  
             fit,
+            discountedPrice,
             washCare,
             specification,
+            discountedPercentage,
             owner: user._id,
             stock,
             size,
@@ -179,21 +183,18 @@ const updateProduct = asyncHandler(async (req, res) => {
         throw new ApiError(403, "You are not authorized to update this product");
     }
 
-    const { name, description, price, discount, type, quantity, Size } = req.body;
-    console.log(name, description, price, discount, type, quantity, Size)
-
-    if(!name || !description || !price || !discount || !type || !quantity || !Size){
-        throw new ApiError(400, "Please fill all the fields");
-    }
+    const { productName, price , color, description, fit, discount, discountedPrice, discountedPercentage} = req.body;
 
     const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
-        name,
-        description,
+        productName,
         price,
+        color,
+        description,
+        fit,
         discount,
-        type,
-        quantity,
-        Size
+        discountedPrice,
+        discountedPercentage,
+
     }, { new: true });
 
     return res

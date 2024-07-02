@@ -12,10 +12,6 @@ const createOrder = asyncHandler(async (req, res) => {
 
     const { color, size, quantity } = req.body;
 
-    if (!color || !size || !quantity) {
-        throw new ApiError(400, "Please fill all the fields");
-    }
-
     const product = await Product.findById(req.params.id);
 
     if (!product) {
