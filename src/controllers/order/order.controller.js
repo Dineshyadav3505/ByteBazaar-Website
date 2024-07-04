@@ -10,8 +10,6 @@ import UserAddress from "../../models/user/userAddress.model.js";
 const createOrder = asyncHandler(async (req, res) => {
     const user = req.user;
 
-    const { color, size, quantity } = req.body;
-
     const product = await Product.findById(req.params.id);
 
     if (!product) {
@@ -40,10 +38,6 @@ const createOrder = asyncHandler(async (req, res) => {
     const order = new Order({
         userId: user._id,
         productId: product._id,
-        color,
-        size,
-        quantity,
-        totalPrice,
         userAddress: userAddress?.[0]?._id || null
     });
 
