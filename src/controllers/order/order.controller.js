@@ -8,46 +8,38 @@ import UserAddress from "../../models/user/userAddress.model.js";
 
 
 const createOrder = asyncHandler(async (req, res) => {
+  try {
+    console.log("ff")
     const user = req.user;
+    const { productIds, userAddressId, grandTotal } = req.body;
 
-    const product = await Product.findById(req.params.id);
+    // Validate the list of product IDs
+    const products = await Product.find({ _id: { $in: productIds } });
 
-    if (!product) {
-        throw new ApiError(404, "Product not found");
+    if (products.length !== productIds.length) {
+      throw new ApiError(404, 'One or more products not found');
     }
 
-    const userAddress = await UserAddress.find({ user: user._id });
+    // Validate the user address
+    const userAddress = await UserAddress.findById(userAddressId);
 
-    const inventoryId = product.inventoryId.toString();
-
-    const productInventory = await ProductInventory.findById(inventoryId);
-    if (!productInventory) {
-        throw new ApiError(404, "Product inventory not found");
+    if (!userAddress) {
+      throw new ApiError(404, 'User address not found');
     }
 
-    if (productInventory.quantity < quantity) {
-        throw new ApiError(400, "Quantity not available");
-    }
-
-    productInventory.quantity -= quantity;
-    await productInventory.save();
-
-    const totalPrice = (product.price - product.discount) * quantity;
-
-    // create order
-    const order = new Order({
-        userId: user._id,
-        productId: product._id,
-        userAddress: userAddress?.[0]?._id || null
+    // Create the order
+    const order = new Order.create({
+      userId: user._id,
+      productId: productIds,
+      grandTotal,
+      userAddress: userAddress._id,
     });
 
-    await order.save();
-
-    res
-        .status(201)
-        .json(
-            new ApiResponse(201, order, "Order created successfully")
-        );
+    res.status(201).json(new ApiResponse(201, order, 'Order created successfully'));
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 });
 
 const getOrders = asyncHandler(async (req, res) => {

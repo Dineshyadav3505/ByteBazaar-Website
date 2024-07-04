@@ -5,23 +5,11 @@ const orderSchema = new Schema({
         type: Schema.Types.ObjectId, 
         ref: "User", 
     },
-    productId: { 
+    productId:[{ 
         type: Schema.Types.ObjectId, 
         ref: "Product", 
-    },
-    color:{
-        type: String,
-        required: true
-    },
-    size:{
-        type: String,
-        required: true
-    },
-    quantity: { 
-        type: Number, 
-        required: true 
-    },
-    totalPrice: {
+    }],
+    grandTotal: {
         type: Number,
         required: true
     },

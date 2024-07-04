@@ -4,7 +4,7 @@ import { createOrder, deleteOrder, getOrders } from "../../controllers/order/ord
 import { getOrderPayment, orderPyament, update } from "../../controllers/order/orderPayment.controller.js";
 const router = Router()
 
-router.route("/create/:id").post(verifyJWT, createOrder);
+router.route("/create").post(verifyJWT, createOrder);
 router.route("/paymenty").post(verifyJWT, orderPyament);
 router.route("/paymenty").patch(verifyJWT, update);
 router.route("/").get(verifyJWT, getOrders);
