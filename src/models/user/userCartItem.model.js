@@ -15,6 +15,10 @@ const cartItemSchema = new Schema({
         required: true,
         default: 1,
     }, 
+    productSize: {
+        type: String,
+        required: true,
+    }
 
 },{timestamps:true});
 

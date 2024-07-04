@@ -10,6 +10,7 @@ const addItemInCart = asyncHandler(async (req, res) => {
     const userId = user._id.toString();
 
     const quantity = req.body.quantity || 1;
+    const productSize = req.body.productSize;
 
     const cart = await Cart.findOne({ userId });
 
@@ -26,25 +27,7 @@ const addItemInCart = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Item already in cart");
     }
 
-    const cartItem = await CartItem.create({ cartId: cart._id, productId, quantity });
-
-    const findprodect = await Product.findById(productId)
-    const price = findprodect.price
-    const discount = findprodect.discount
-    const productQuantity = cartItem.quantity
-    const discountPrice = productQuantity * price - (price * discount / 100)
-
-    const cardId = (cartItem.cartId.toString())
-
-    await Cart.findByIdAndUpdate(
-        cardId, 
-        { 
-            $inc: {
-                total: discountPrice 
-            }
-        }, 
-        { new: true}
-    );
+    const cartItem = await CartItem.create({ cartId: cart._id, productId, quantity, productSize });
 
     return res
       .status(201)

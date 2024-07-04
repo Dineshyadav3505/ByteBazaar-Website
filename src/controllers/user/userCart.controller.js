@@ -6,8 +6,6 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 
 const userCartList = asyncHandler(async (req, res) => {
     const user = req.user;
-
-    
     
     return res
       .status(201)
