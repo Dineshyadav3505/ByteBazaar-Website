@@ -4,20 +4,18 @@ const orderSchema = new Schema({
     userId: { 
         type: Schema.Types.ObjectId, 
         ref: "User", 
+        required: true 
     },
-    productId:[{ 
+    productId: [{ 
         type: Schema.Types.ObjectId, 
         ref: "Product", 
+        required: true 
     }],
-    grandTotal: {
-        type: Number,
-        required: true
-    },
     userAddress: { 
         type: Schema.Types.ObjectId, 
         ref: "Address", 
+        required: true 
     },
-    
 }, { timestamps: true });
 
 const Order = mongoose.model("Order", orderSchema);

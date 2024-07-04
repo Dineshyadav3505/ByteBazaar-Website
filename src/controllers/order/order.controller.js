@@ -10,30 +10,42 @@ import UserAddress from "../../models/user/userAddress.model.js";
 const createOrder = asyncHandler(async (req, res) => {
   try {
     const user = req.user;
-    const id = (user._id).toString();
-    console.log(id);
-    const { productId, grandTotal, userAddress } = req.params;
-    console.log(productId, grandTotal, userAddress);
+    const userId = user._id.toString();
+    const { productId, userAddress } = req.body;
     
-  } catch (error) {
-    console.log("error", error)
-  }
-  res.status(200).json(new ApiResponse(200, {}, "Order created successfully"));
+    const product = productId.map((product) => Product.findById(product));
+    console.log(product);
 
+    const userAddressData = await UserAddress.findById(userAddress);
+
+    if (!userAddressData) {
+      throw new ApiError(404, "User address not found");
+    }
+
+    const order = await Order.create({
+      userId,
+      productId,
+      userAddress,
+    });
+
+    res.status(201).json(new ApiResponse(201, order, "Order created successfully"));
+  } catch (error) {
+    throw new ApiError(error.statusCode || 500, error.message);
+  }
 });
 
 const getOrders = asyncHandler(async (req, res) => {
+  try {
     const user = req.user;
 
     const orders = await Order.find({ userId: user._id })
-        .populate("productId")
-        .populate("userAddress");
+      .populate('userAddress');
 
-    res
-        .status(200)
-        .json(
-            new ApiResponse(200, orders, "Orders retrieved successfully")
-        );
+    res.status(200).json(new ApiResponse(200, orders, 'Orders retrieved successfully'));
+  } catch (error) {
+    console.error('Error retrieving orders:', error);
+    res.status(500).json(new ApiResponse(500, {}, 'Error retrieving orders'));
+  }
 });
 
 const deleteOrder = asyncHandler(async (req, res) => {
