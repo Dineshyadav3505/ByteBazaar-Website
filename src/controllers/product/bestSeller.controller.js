@@ -5,12 +5,7 @@ import { ApiResponse } from "../../utils/ApiResponse.js";
 
 const bestSeller = asyncHandler(async (req, res) => {   
 
-    const user = req.user;
-    const { productId } = req.params;
-
-    if (user.role !== "Seller") {
-        throw new ApiError(401, "Unauthorized");
-    }
+ 
 
     const bestSeller = await BestSeller.create({
         productId,
